@@ -1,0 +1,156 @@
+{
+  "users": [
+    {
+      "id": "admin-1",
+      "email": "admin@interviewai.com",
+      "name": "System Admin",
+      "role": "admin",
+      "passwordHash": "$2b$10$iWyHdO4n0.7Ep0pQpgz6YeaUJw0t9VainlLyqUoKJWvpXiZSbBNbq",
+      "createdAt": "2026-07-20T16:18:47.459Z"
+    }
+  ],
+  "resumes": [],
+  "sessions": [],
+  "questions": [
+    {
+      "id": "q-1787156395389-nk8k",
+      "sessionId": "session-1787156394124-shux",
+      "questionText": "Walk me through designing an end-to-end real-time notification system using WebSockets, Redis pub/sub, and Node.js.",
+      "questionType": "situational",
+      "orderIndex": 1,
+      "isFollowup": false
+    },
+    {
+      "id": "q-1787156405589-eje4",
+      "sessionId": "session-1787156394124-shux",
+      "questionText": "How do you handle JWT token rotation, refresh tokens, and CSRF protection in full-stack web apps?",
+      "questionType": "situational",
+      "orderIndex": 2,
+      "isFollowup": true,
+      "parentQuestionId": "q-1787156395389-nk8k"
+    },
+    {
+      "id": "q-1787156421946-7gpj",
+      "sessionId": "session-1787156394124-shux",
+      "questionText": "Explain your strategy for database indexing and query optimization when API endpoint response time degrades.",
+      "questionType": "situational",
+      "orderIndex": 3,
+      "isFollowup": false
+    },
+    {
+      "id": "q-1787156471352-1mk2",
+      "sessionId": "session-1787156470164-36ow",
+      "questionText": "How do you optimize Core Web Vitals (LCP, CLS, INP) in a large single-page React web application?",
+      "questionType": "situational",
+      "orderIndex": 1,
+      "isFollowup": false
+    },
+    {
+      "id": "q-1787156480746-7duw",
+      "sessionId": "session-1787156470164-36ow",
+      "questionText": "Explain how React 18 Concurrent Rendering and Server Components differ from traditional Client Component hydration.",
+      "questionType": "situational",
+      "orderIndex": 2,
+      "isFollowup": true,
+      "parentQuestionId": "q-1787156471352-1mk2"
+    },
+    {
+      "id": "q-1787156488683-po3o",
+      "sessionId": "session-1787156470164-36ow",
+      "questionText": "How do you secure modern web applications against Cross-Site Scripting (XSS) and CSRF attacks?",
+      "questionType": "situational",
+      "orderIndex": 3,
+      "isFollowup": false
+    }
+  ],
+  "answers": [
+    {
+      "id": "a-1787156404363-6dhy",
+      "questionId": "q-1787156395389-nk8k",
+      "transcriptText": "vghfd66564589oiuygfhjhvnkiutrdkl",
+      "technicalScore": 5,
+      "communicationScore": 10,
+      "sentimentScore": 10,
+      "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
+      "createdCompletedAt": "2026-08-19T16:20:04.363Z"
+    },
+    {
+      "id": "a-1787156420921-t5t9",
+      "questionId": "q-1787156405589-eje4",
+      "transcriptText": "bhd649ytydc mklhiu6587434wdfhhmn,cyohu",
+      "technicalScore": 35,
+      "communicationScore": 40,
+      "sentimentScore": 50,
+      "aiFeedback": "Your answer is very brief. Try expanding on technical reasoning, key trade-offs, and concrete examples to show domain expertise.",
+      "createdCompletedAt": "2026-08-19T16:20:20.921Z"
+    },
+    {
+      "id": "a-1787156430365-8i3m",
+      "questionId": "q-1787156421946-7gpj",
+      "transcriptText": "bcvgfyu094sjnlmbcdaegjl;jknj",
+      "technicalScore": 5,
+      "communicationScore": 10,
+      "sentimentScore": 10,
+      "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
+      "createdCompletedAt": "2026-08-19T16:20:30.365Z"
+    },
+    {
+      "id": "a-1787156479610-jgif",
+      "questionId": "q-1787156471352-1mk2",
+      "transcriptText": "bvxes4567jdgfxcbnoiuytfdfcgvmb,nm",
+      "technicalScore": 5,
+      "communicationScore": 10,
+      "sentimentScore": 10,
+      "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
+      "createdCompletedAt": "2026-08-19T16:21:19.610Z"
+    },
+    {
+      "id": "a-1787156487531-4dsc",
+      "questionId": "q-1787156480746-7duw",
+      "transcriptText": "gfcstr5r789iokknbnvfgws39iknbgfx",
+      "technicalScore": 5,
+      "communicationScore": 10,
+      "sentimentScore": 10,
+      "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
+      "createdCompletedAt": "2026-08-19T16:21:27.531Z"
+    },
+    {
+      "id": "a-1787156497270-vfr9",
+      "questionId": "q-1787156488683-po3o",
+      "transcriptText": "bvcdftfgy4689gghv\nbcbvfuyginkj[opiui.",
+      "technicalScore": 35,
+      "communicationScore": 40,
+      "sentimentScore": 50,
+      "aiFeedback": "Your answer is very brief. Try expanding on technical reasoning, key trade-offs, and concrete examples to show domain expertise.",
+      "createdCompletedAt": "2026-08-19T16:21:37.270Z"
+    }
+  ],
+  "improvementPlans": [
+    {
+      "id": "plan-1787156431825",
+      "sessionId": "session-1787156394124-shux",
+      "focusAreas": [
+        "Core Track Fundamentals",
+        "Structured Answer Delivery"
+      ],
+      "suggestedPractice": [
+        "Review core track documentation and study basic concepts",
+        "Practice formulating 2-minute clear technical responses before submitting"
+      ],
+      "completed": false
+    },
+    {
+      "id": "plan-1787156498511",
+      "sessionId": "session-1787156470164-36ow",
+      "focusAreas": [
+        "Core Track Fundamentals",
+        "Structured Answer Delivery"
+      ],
+      "suggestedPractice": [
+        "Review core track documentation and study basic concepts",
+        "Practice formulating 2-minute clear technical responses before submitting"
+      ],
+      "completed": false
+    }
+  ]
+}
