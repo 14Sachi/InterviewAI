@@ -422,12 +422,16 @@ app.post('/api/sessions/:id/submit-answer', authenticateToken, async (req: AuthR
   try {
     if (!req.user) return;
     const sessionId = req.params.id;
-    const { questionId, textAnswer, audioBase64, mimeType } = req.body;
+    const { questionId, textAnswer, audioBase64, mimeType, proctoring } = req.body;
 
     const session = store.getSessionById(sessionId);
     if (!session) {
       res.status(404).json({ error: 'Session not found' });
       return;
+    }
+
+    if (proctoring) {
+      store.updateSession(sessionId, { proctoring });
     }
 
     const currentQuestion = session.questions?.find((q) => q.id === questionId);
@@ -580,7 +584,86 @@ app.post('/api/sessions/:id/toggle-plan', authenticateToken, (req: AuthRequest, 
   res.json({ plan });
 });
 
+// Record Exam Proctoring & Tab Switch Events
+app.post('/api/sessions/:id/proctoring-event', authenticateToken, (req: AuthRequest, res: Response) => {
+  const sessionId = req.params.id;
+  const { event, proctoringReport } = req.body;
+  const session = store.getSessionById(sessionId);
+  if (!session) {
+    res.status(404).json({ error: 'Session not found' });
+    return;
+  }
+
+  if (proctoringReport) {
+    store.updateSession(sessionId, { proctoring: proctoringReport });
+  } else if (event) {
+    const currentProctoring = session.proctoring || {
+      tabSwitchCount: 0,
+      totalTimeAwaySeconds: 0,
+      fullscreenViolationsCount: 0,
+      integrityScore: 100,
+      events: [],
+    };
+    currentProctoring.events.unshift(event);
+    if (event.type === 'tab_switch' || event.type === 'window_blur') {
+      currentProctoring.tabSwitchCount += 1;
+      currentProctoring.integrityScore = Math.max(0, 100 - currentProctoring.tabSwitchCount * 15);
+    }
+    store.updateSession(sessionId, { proctoring: currentProctoring });
+  }
+
+  res.json({ success: true, proctoring: session.proctoring });
+});
+
 // 5. Admin Routes
+app.post('/api/admin/claim-ownership', authenticateToken, (req: AuthRequest, res: Response) => {
+  const { passkey } = req.body;
+  const validPasskeys = ['admin123', 'interviewai2026', 'owner2026', 'admin'];
+
+  const isOwner = req.user?.email?.toLowerCase() === OWNER_ADMIN_EMAIL.toLowerCase();
+  const isValidPasskey = typeof passkey === 'string' && validPasskeys.includes(passkey.trim().toLowerCase());
+
+  if (!isOwner && !isValidPasskey) {
+    res.status(403).json({ error: 'Invalid owner passkey. Please enter the correct admin secret.' });
+    return;
+  }
+
+  const updatedUser = store.updateUserRole(req.user!.id, 'admin');
+  if (!updatedUser) {
+    res.status(404).json({ error: 'User account not found' });
+    return;
+  }
+
+  const newToken = jwt.sign(
+    { id: updatedUser.id, email: updatedUser.email, role: 'admin' },
+    JWT_SECRET,
+    { expiresIn: '7d' }
+  );
+
+  res.json({
+    success: true,
+    message: 'Owner admin privileges granted successfully.',
+    token: newToken,
+    user: updatedUser,
+  });
+});
+
+app.patch('/api/admin/users/:id/role', authenticateToken, requireAdmin, (req: AuthRequest, res: Response) => {
+  const { role } = req.body;
+  if (role !== 'admin' && role !== 'user') {
+    res.status(400).json({ error: 'Invalid role specified' });
+    return;
+  }
+
+  const updated = store.updateUserRole(req.params.id, role);
+  if (!updated) {
+    res.status(404).json({ error: 'User not found' });
+    return;
+  }
+
+  res.json({ success: true, user: updated });
+});
+
 app.get('/api/admin/users', authenticateToken, requireAdmin, (req: AuthRequest, res: Response) => {
   const users = store.getUsers();
   const sessions = store.getAllSessions();

@@ -33,20 +33,21 @@ export const Navbar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 text-slate-800 dark:text-slate-100 transition-colors">
+    <nav className="sticky top-0 z-50 bg-white/85 dark:bg-slate-950/85 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 text-slate-800 dark:text-slate-100 transition-all shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-xl bg-slate-900 dark:bg-indigo-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-all">
-              <Bot className="w-5 h-5 text-indigo-400 dark:text-white" />
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 group-hover:shadow-indigo-500/40 transition-all duration-300">
+              <Bot className="w-5 h-5 text-white animate-pulse" />
             </div>
             <div className="flex flex-col">
-              <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">
-                Interview<span className="text-indigo-600 dark:text-indigo-400">AI</span>
+              <span className="font-black text-xl tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
+                Interview<span className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">AI</span>
               </span>
-              <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 -mt-1 tracking-wider uppercase">
-                Mock Platform
+              <span className="text-[10px] font-bold text-slate-400 dark:text-slate-400 -mt-1 tracking-wider uppercase flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Live Voice Coach
               </span>
             </div>
           </Link>
@@ -106,19 +107,22 @@ export const Navbar: React.FC = () => {
                   Profile & Resume
                 </Link>
 
-                {user.role === 'admin' && (
-                  <Link
-                    to="/admin"
-                    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
-                      isActive('/admin')
-                        ? 'bg-amber-500 text-white shadow-xs'
-                        : 'text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40'
-                    }`}
-                  >
-                    <ShieldCheck className="w-4 h-4" />
-                    Admin
-                  </Link>
-                )}
+                <Link
+                  to="/admin"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                    isActive('/admin')
+                      ? 'bg-amber-500 text-white shadow-xs'
+                      : user.role === 'admin'
+                      ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/80 hover:bg-amber-100 dark:hover:bg-amber-900/40'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/50 dark:hover:bg-amber-950/30'
+                  }`}
+                >
+                  <ShieldCheck className="w-4 h-4 text-amber-500" />
+                  <span>Admin</span>
+                  {user.role === 'admin' && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  )}
+                </Link>
               </>
             ) : (
               <div className="flex items-center gap-1">
@@ -139,19 +143,17 @@ export const Navbar: React.FC = () => {
                   </span>
                 </Link>
 
-                <a
-                  href="#features"
-                  className="px-3 py-2 text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-bold transition-colors"
+                <Link
+                  to="/admin"
+                  className={`px-3 py-2 text-xs font-bold transition-colors flex items-center gap-1.5 ${
+                    isActive('/admin')
+                      ? 'text-amber-600 dark:text-amber-400 font-extrabold'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400'
+                  }`}
                 >
-                  Company Presets
-                </a>
-
-                <a
-                  href="#features"
-                  className="px-3 py-2 text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-bold transition-colors"
-                >
-                  Practice Tips
-                </a>
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Admin Portal</span>
+                </Link>
               </div>
             )}
           </div>
@@ -278,16 +280,19 @@ export const Navbar: React.FC = () => {
                 <UserIcon className="w-4 h-4 text-pink-600 dark:text-pink-400" />
                 Profile
               </Link>
-              {user.role === 'admin' && (
-                <Link
-                  to="/admin"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 text-sm font-semibold"
-                >
-                  <ShieldCheck className="w-4 h-4" />
-                  Admin Dashboard
-                </Link>
-              )}
+              <Link
+                to="/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 text-sm font-semibold"
+              >
+                <ShieldCheck className="w-4 h-4 text-amber-500" />
+                <span>Admin Portal</span>
+                {user.role === 'admin' && (
+                  <span className="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-1.5 py-0.2 rounded-full font-bold">
+                    Admin Active
+                  </span>
+                )}
+              </Link>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
@@ -301,6 +306,14 @@ export const Navbar: React.FC = () => {
             </>
           ) : (
             <div className="space-y-2 pt-2">
+              <Link
+                to="/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2 w-full py-2 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30 rounded-lg text-sm font-semibold border border-amber-200 dark:border-amber-800/60"
+              >
+                <ShieldCheck className="w-4 h-4 text-amber-500" />
+                Admin Portal
+              </Link>
               <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}

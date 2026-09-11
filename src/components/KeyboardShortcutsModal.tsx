@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Keyboard, Mic, Send, Volume2, Settings2, HelpCircle } from 'lucide-react';
+import { X, Keyboard, Mic, Send, Volume2, Settings2, HelpCircle, Camera } from 'lucide-react';
 
 interface KeyboardShortcutsModalProps {
   isOpen: boolean;
@@ -21,6 +21,12 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
       action: 'Submit Answer',
       description: 'Submit your spoken or written response for immediate AI grading',
       icon: <Send className="w-4 h-4 text-indigo-400" />,
+    },
+    {
+      key: 'Alt + C',
+      action: 'Toggle Camera Video (On / Off)',
+      description: 'Turn your live webcam video stream on or off',
+      icon: <Camera className="w-4 h-4 text-cyan-400" />,
     },
     {
       key: 'Alt + S',

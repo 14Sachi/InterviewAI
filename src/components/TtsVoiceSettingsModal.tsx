@@ -110,6 +110,22 @@ export const TtsVoiceSettingsModal: React.FC<TtsVoiceSettingsModalProps> = ({
     }
   }, [selectedVoiceName]);
 
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  const handleClose = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsPlayingTest(false);
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   const currentProfile = VOICE_PROFILES.find((p) => p.id === selectedProfileId) || VOICE_PROFILES[0];
@@ -150,7 +166,7 @@ export const TtsVoiceSettingsModal: React.FC<TtsVoiceSettingsModalProps> = ({
       <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 space-y-6 shadow-2xl relative text-white">
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition"
         >
           <X className="w-5 h-5" />

@@ -5,9 +5,15 @@ import { InterviewSession, InterviewQuestion } from '../types';
 import { TtsVoiceSettingsModal, VOICE_PROFILES, VoiceProfile } from '../components/TtsVoiceSettingsModal';
 import { KeyboardShortcutsModal } from '../components/KeyboardShortcutsModal';
 import { AudioSettingsModal } from '../components/AudioSettingsModal';
+import { CameraVideoStage } from '../components/CameraVideoStage';
+import { TabProctoringHUD } from '../components/TabProctoringHUD';
+import { ProctoringReport } from '../types';
 import {
   Mic,
   MicOff,
+  Camera,
+  CameraOff,
+  Video,
   Volume2,
   VolumeX,
   Send,
@@ -36,6 +42,7 @@ export const InterviewRoomPage: React.FC = () => {
   const [currentQuestion, setCurrentQuestion] = useState<InterviewQuestion | null>(initialQuestion);
   const [textAnswer, setTextAnswer] = useState('');
   const [inputMode, setInputMode] = useState<'mic' | 'text'>('mic');
+  const [latestProctoringReport, setLatestProctoringReport] = useState<ProctoringReport | null>(null);
 
   // Modal states
   const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
@@ -53,6 +60,7 @@ export const InterviewRoomPage: React.FC = () => {
   const [recordedAudioBase64, setRecordedAudioBase64] = useState<string | null>(null);
   const [audioBlobUrl, setAudioBlobUrl] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordingStreamRef = useRef<MediaStream | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
   // Audio Canvas visualizer refs
@@ -156,6 +164,30 @@ export const InterviewRoomPage: React.FC = () => {
     return () => clearInterval(interval);
   }, [currentQuestion, isSubmitting]);
 
+  // Cleanup all audio, streams, and speech on unmount
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        try {
+          mediaRecorderRef.current.stop();
+        } catch (_) {}
+      }
+      if (recordingStreamRef.current) {
+        recordingStreamRef.current.getTracks().forEach((track) => track.stop());
+        recordingStreamRef.current = null;
+      }
+      if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
+        audioCtxRef.current.close().catch(() => {});
+      }
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
+    };
+  }, []);
+
   // Speech Synthesis player function with voice profile support
   const speakQuestionText = (text: string) => {
     if (!('speechSynthesis' in window)) return;
@@ -188,10 +220,16 @@ export const InterviewRoomPage: React.FC = () => {
 
   // Auto read aloud question when question changes
   useEffect(() => {
-    if (currentQuestion && autoReadQuestion) {
+    if (currentQuestion && autoReadQuestion && !isSubmitting) {
       speakQuestionText(currentQuestion.questionText);
     }
-  }, [currentQuestion, selectedVoiceProfile, ttsPitch, ttsRate, autoReadQuestion]);
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+      }
+    };
+  }, [currentQuestion?.id, selectedVoiceProfile, ttsPitch, ttsRate, autoReadQuestion]);
 
   const toggleTTS = () => {
     if (!currentQuestion) return;
@@ -208,7 +246,14 @@ export const InterviewRoomPage: React.FC = () => {
   // Start Mic Recording & Audio Visualizer
   const startRecording = async () => {
     try {
+      // Immediately cancel any TTS audio reading so mic won't pick it up
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      recordingStreamRef.current = stream;
       audioChunksRef.current = [];
 
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
@@ -235,6 +280,7 @@ export const InterviewRoomPage: React.FC = () => {
 
         // Stop stream tracks
         stream.getTracks().forEach((track) => track.stop());
+        recordingStreamRef.current = null;
       };
 
       recorder.start(100);
@@ -296,11 +342,23 @@ export const InterviewRoomPage: React.FC = () => {
   };
 
   const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      if (audioCtxRef.current) audioCtxRef.current.close();
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      try {
+        mediaRecorderRef.current.stop();
+      } catch (_) {}
+    }
+    if (recordingStreamRef.current) {
+      recordingStreamRef.current.getTracks().forEach((track) => track.stop());
+      recordingStreamRef.current = null;
+    }
+    setIsRecording(false);
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
+    if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
+      audioCtxRef.current.close().catch(() => {});
+      audioCtxRef.current = null;
     }
   };
 
@@ -308,6 +366,17 @@ export const InterviewRoomPage: React.FC = () => {
   const handleSubmitAnswer = async () => {
     const targetQuestion = currentQuestion || displayedQuestion;
     if (!targetQuestion || isSubmitting) return;
+
+    // 1. Immediately cancel any speech/question reading audio
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+
+    // 2. Stop recording if active
+    if (isRecording) {
+      stopRecording();
+    }
 
     if (!recordedAudioBase64 && !textAnswer.trim()) {
       setError('Please record your spoken answer or type your response before submitting.');
@@ -331,6 +400,7 @@ export const InterviewRoomPage: React.FC = () => {
           textAnswer: textAnswer.trim(),
           audioBase64: recordedAudioBase64,
           mimeType: 'audio/webm',
+          proctoring: latestProctoringReport,
         }),
       });
 
@@ -345,6 +415,12 @@ export const InterviewRoomPage: React.FC = () => {
       setRecordedAudioBase64(null);
       setAudioBlobUrl(null);
       setTextAnswer('');
+
+      // Ensure speech synthesis is completely cancelled before next question / transition
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+      }
 
       const updatedSession: InterviewSession = data.session;
       setSession(updatedSession);
@@ -390,6 +466,15 @@ export const InterviewRoomPage: React.FC = () => {
         e.preventDefault();
         if (isRecording) stopRecording();
         else startRecording();
+        return;
+      }
+
+      // Alt+C: Toggle Camera
+      if (e.altKey && e.code === 'KeyC') {
+        e.preventDefault();
+        const current = localStorage.getItem('interview_camera_enabled') !== 'false';
+        localStorage.setItem('interview_camera_enabled', String(!current));
+        window.dispatchEvent(new Event('storage'));
         return;
       }
 
@@ -503,10 +588,10 @@ export const InterviewRoomPage: React.FC = () => {
             <button
               onClick={() => setIsAudioModalOpen(true)}
               className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold text-xs flex items-center gap-1.5 transition"
-              title="Calibrate Microphone Input & Sensitivity"
+              title="Camera & Microphone Device Settings"
             >
-              <Mic className="w-4 h-4 text-indigo-500" />
-              <span className="hidden md:inline">Mic Settings</span>
+              <Camera className="w-4 h-4 text-indigo-500" />
+              <span className="hidden md:inline">Cam & Mic</span>
             </button>
 
             <button
@@ -584,6 +669,25 @@ export const InterviewRoomPage: React.FC = () => {
           <span>{error}</span>
         </div>
       )}
+
+      {/* Real-Time Exam Tab & Window Focus Proctoring HUD */}
+      <TabProctoringHUD
+        sessionId={id}
+        onProctoringUpdate={(report) => setLatestProctoringReport(report)}
+      />
+
+      {/* Live AI Interviewer Persona & Candidate Webcam Proctoring Stage */}
+      <CameraVideoStage
+        isRecording={isRecording}
+        isSpeaking={isSpeaking}
+        selectedVoiceProfile={selectedVoiceProfile}
+        trackName={session.track}
+        difficulty={session.difficulty}
+        companyPreset={session.companyPreset}
+        candidateName={user?.name || 'Candidate'}
+        onToggleMicRecording={isRecording ? stopRecording : startRecording}
+        onOpenDeviceSettings={() => setIsAudioModalOpen(true)}
+      />
 
       {/* Core Question Card */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs relative overflow-hidden">

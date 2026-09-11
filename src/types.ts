@@ -67,6 +67,24 @@ export interface ImprovementPlan {
   completed: boolean;
 }
 
+export interface ProctoringEvent {
+  id: string;
+  type: 'tab_switch' | 'window_blur' | 'fullscreen_exit' | 'screen_share_change';
+  timestamp: string;
+  durationSeconds?: number;
+  details?: string;
+}
+
+export interface ProctoringReport {
+  tabSwitchCount: number;
+  totalTimeAwaySeconds: number;
+  fullscreenViolationsCount: number;
+  integrityScore: number; // 0-100%
+  events: ProctoringEvent[];
+  lastTabSwitchTime?: string;
+  activeScreenStatus?: 'clean' | 'suspicious' | 'flagged';
+}
+
 export interface InterviewSession {
   id: string;
   userId: string;
@@ -83,6 +101,7 @@ export interface InterviewSession {
   totalQuestionsCount: number;
   questions?: QuestionWithAnswer[];
   improvementPlan?: ImprovementPlan;
+  proctoring?: ProctoringReport;
 }
 
 export interface AdminAnalytics {

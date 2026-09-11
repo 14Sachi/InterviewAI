@@ -33,6 +33,9 @@ import {
   RotateCcw,
   Download,
   Share2,
+  Monitor,
+  ShieldAlert,
+  AlertTriangle,
 } from 'lucide-react';
 
 export const ResultsPage: React.FC = () => {
@@ -45,6 +48,13 @@ export const ResultsPage: React.FC = () => {
   const [expandedQuestionId, setExpandedQuestionId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  // Ensure any previous speech synthesis from interview room is stopped
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }, []);
 
   useEffect(() => {
     if (isAuthLoading) return;
@@ -295,6 +305,47 @@ export const ResultsPage: React.FC = () => {
               </li>
             ))}
           </ul>
+        </div>
+      </div>
+
+      {/* Exam Anti-Cheating & Tab Switch Proctoring Summary */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 rounded-2xl space-y-3 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${
+              !session.proctoring || session.proctoring.tabSwitchCount === 0
+                ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
+                : 'bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800'
+            }`}>
+              {!session.proctoring || session.proctoring.tabSwitchCount === 0 ? (
+                <ShieldCheck className="w-5 h-5" />
+              ) : (
+                <ShieldAlert className="w-5 h-5" />
+              )}
+            </div>
+            <div>
+              <h3 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                <span>Exam Focus & Tab Proctoring Integrity</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${
+                  !session.proctoring || session.proctoring.tabSwitchCount === 0
+                    ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                    : 'bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
+                }`}>
+                  {!session.proctoring || session.proctoring.tabSwitchCount === 0 ? '100% Focused · Verified' : `${session.proctoring.tabSwitchCount} Tab Switches Logged`}
+                </span>
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Real-time browser tab switches and window blur events monitored during the examination session.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-right">
+            <span className="text-xs text-slate-400 font-bold uppercase block">Integrity Score</span>
+            <span className="text-xl font-black text-indigo-600 dark:text-indigo-400">
+              {session.proctoring?.integrityScore ?? 100}%
+            </span>
+          </div>
         </div>
       </div>
 

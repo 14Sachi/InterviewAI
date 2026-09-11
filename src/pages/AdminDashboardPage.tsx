@@ -281,6 +281,19 @@ export const AdminDashboardPage: React.FC = () => {
               {isClaiming ? <RefreshCw className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4 text-amber-400" />}
               <span>Verify & Open Owner Dashboard</span>
             </button>
+
+            <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-xl p-2.5 text-[11px] text-amber-800 dark:text-amber-300 flex items-center justify-between">
+              <span className="font-semibold">Demo Passkey: <code className="font-mono bg-amber-100 dark:bg-amber-900/60 px-1 rounded font-bold">admin123</code></span>
+              <button
+                type="button"
+                onClick={() => {
+                  setPasskeyInput('admin123');
+                }}
+                className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+              >
+                Auto-fill
+              </button>
+            </div>
           </form>
 
           <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400">
@@ -942,6 +955,18 @@ export const AdminDashboardPage: React.FC = () => {
                             </div>
 
                             <div className="flex items-center gap-2">
+                              {session.proctoring && (
+                                <div className="text-right">
+                                  <span className="text-[10px] font-bold text-slate-400 block uppercase">Integrity</span>
+                                  <span className={`text-xs font-black px-2 py-0.5 rounded-full border ${
+                                    session.proctoring.tabSwitchCount === 0
+                                      ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                                      : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
+                                  }`}>
+                                    {session.proctoring.tabSwitchCount === 0 ? '100% Focus' : `${session.proctoring.tabSwitchCount} Tab Sw.`}
+                                  </span>
+                                </div>
+                              )}
                               {session.overallScore !== undefined && (
                                 <div className="text-right">
                                   <span className="text-xs font-bold text-slate-500 dark:text-slate-400 block">Score</span>
