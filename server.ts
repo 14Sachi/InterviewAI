@@ -2,6 +2,8 @@ import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { createServer as createViteServer } from 'vite';
 
 import { store } from './src/db/store.js';
@@ -14,6 +16,15 @@ import {
   generateWeeklyPracticeTipWithGemini,
 } from './src/services/gemini.js';
 import { TrackType, DifficultyType } from './src/types.js';
+
+// Environment & Startup Security Checks
+if (!process.env.GEMINI_API_KEY) {
+  console.warn('⚠️  [SECURITY WARNING] GEMINI_API_KEY is not defined in environment variables.');
+}
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === 'production') {
+  console.error('❌ [CRITICAL SECURITY] JWT_SECRET must be explicitly defined in production!');
+  process.exit(1);
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || 'interview-ai-secret-key-2026';
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
@@ -42,9 +53,53 @@ function validatePassword(password: unknown): string | null {
 
 const app = express();
 
-// Middleware
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+// Security Headers via Helmet (protection against XSS, clickjacking, MIME sniffing)
+app.use(
+  helmet({
+    contentSecurityPolicy: false, // Maintain compatibility with Vite inline dev/SPA scripts
+    crossOriginEmbedderPolicy: false,
+  })
+);
+
+// Payload size limit reduced to 10MB to prevent memory exhaustion / DoS
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Rate Limiting Protection
+// 1. General API rate limiter (protects against brute API crawling/flooding)
+const generalApiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 400,
+  message: { error: 'Too many requests from this IP. Please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use('/api', generalApiLimiter);
+
+// 2. Auth rate limiter (protects against credential brute-forcing)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 15,
+  message: { error: 'Too many authentication attempts. Please try again after 15 minutes.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/signup', authLimiter);
+app.use('/api/auth/guest', authLimiter);
+
+// 3. AI Generation rate limiter (protects Gemini quota and server resources)
+const aiLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 40,
+  message: { error: 'AI request rate limit reached. Please wait a few moments before continuing.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use('/api/sessions/start', aiLimiter);
+app.use('/api/sessions/:id/submit-answer', aiLimiter);
+app.use('/api/resume/upload', aiLimiter);
+app.use('/api/notifications/test-email', aiLimiter);
 
 // Auth Token Interface
 interface AuthRequest extends Request {
@@ -427,6 +482,12 @@ app.post('/api/sessions/:id/submit-answer', authenticateToken, async (req: AuthR
     const session = store.getSessionById(sessionId);
     if (!session) {
       res.status(404).json({ error: 'Session not found' });
+      return;
+    }
+
+    // IDOR Protection: Verify session ownership
+    if (req.user.role !== 'admin' && session.userId !== req.user.id) {
+      res.status(403).json({ error: 'Unauthorized: You do not have permission to submit answers to this session' });
       return;
     }
 
