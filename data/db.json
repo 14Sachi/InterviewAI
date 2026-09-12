@@ -11,8 +11,8 @@
     {
       "id": "user-1789226625698-zpoc",
       "email": "sachi@gmail.com",
-      "name": "Sachi G",
-      "role": "user",
+      "name": "Sachi G.",
+      "role": "admin",
       "passwordHash": "$2b$10$3anvUPSr8kh5FwvG0rnTP.FpF6mEOJFzDhctn3x6pASWWAm5Uy4RG",
       "createdAt": "2026-09-12T15:23:45.698Z"
     },
@@ -23,6 +23,14 @@
       "role": "admin",
       "passwordHash": "$2b$10$EUfvwljxErhpYBh9B8mgSuTEkmRc5xn234Q4KCJIuw4kJewMXFivS",
       "createdAt": "2026-09-12T15:26:00.479Z"
+    },
+    {
+      "id": "user-1789228069078-tiik",
+      "email": "sharvari@gmail.com",
+      "name": "sharvari",
+      "role": "admin",
+      "passwordHash": "$2b$10$yInCEGdoL.cWGTwqWkAEluvLpravaWhGcomM2Rwtx/vnFsmB94JWu",
+      "createdAt": "2026-09-12T15:47:49.078Z"
     }
   ],
   "resumes": [],
@@ -44,6 +52,56 @@
       "weaknesses": [
         "Provided incomplete or unreadable answers",
         "Did not demonstrate sufficient domain knowledge"
+      ]
+    },
+    {
+      "id": "session-1789228113446-i6xh",
+      "userId": "user-1789228069078-tiik",
+      "track": "Product Manager",
+      "difficulty": "Beginner",
+      "companyPreset": "Microsoft",
+      "status": "completed",
+      "createdAt": "2026-09-12T15:48:33.446Z",
+      "totalQuestionsCount": 3,
+      "overallScore": 5,
+      "completedAt": "2026-09-12T15:49:10.346Z",
+      "strengths": [
+        "Attempted to participate in the mock interview session"
+      ],
+      "weaknesses": [
+        "Provided incomplete or unreadable answers",
+        "Did not demonstrate sufficient domain knowledge"
+      ]
+    },
+    {
+      "id": "session-live-demo",
+      "userId": "user-1789226625698-zpoc",
+      "track": "Full Stack Engineer",
+      "difficulty": "Advanced",
+      "companyPreset": "Google / Big Tech",
+      "status": "in_progress",
+      "totalQuestionsCount": 4,
+      "createdAt": "2026-09-12T15:42:01.258Z"
+    },
+    {
+      "id": "session-completed-demo",
+      "userId": "user-1789226625698-zpoc",
+      "track": "Full Stack Engineer",
+      "difficulty": "Advanced",
+      "companyPreset": "Google / Big Tech",
+      "status": "completed",
+      "totalQuestionsCount": 3,
+      "overallScore": 89,
+      "createdAt": "2026-09-12T15:07:01.258Z",
+      "completedAt": "2026-09-12T15:47:01.258Z",
+      "strengths": [
+        "Architectural Depth: Masterful explanation of Redis distributed locking, cache stampede prevention, and multi-region replication.",
+        "Systematic Tradeoff Analysis: Explicitly balanced consistency vs. availability (CAP Theorem) and latency vs. throughput trade-offs.",
+        "Enterprise Security: Clear implementation of JWT asymmetric key rotation, HttpOnly SameSite cookie protections, and input sanitization."
+      ],
+      "weaknesses": [
+        "Database Replication Lag: Detail strategies to mitigate replication lag when read replicas are queried immediately after high-write operations.",
+        "Observability & Distributed Tracing: Incorporate OpenTelemetry metrics and distributed span IDs into the incident monitoring explanation."
       ]
     }
   ],
@@ -120,6 +178,64 @@
       "sessionId": "session-1789226653413-7wke",
       "questionText": "How do you handle disagreement between senior engineering leads and executive stakeholders on MVP scope?",
       "questionType": "situational",
+      "orderIndex": 3,
+      "isFollowup": false
+    },
+    {
+      "id": "q-1789228115429-mv90",
+      "sessionId": "session-1789228113446-i6xh",
+      "questionText": "How would you prioritize product roadmap features when balancing technical debt versus aggressive revenue expansion goals?",
+      "questionType": "situational",
+      "orderIndex": 1,
+      "isFollowup": false
+    },
+    {
+      "id": "q-1789228134249-3zur",
+      "sessionId": "session-1789228113446-i6xh",
+      "questionText": "Walk me through how you would measure the launch success of an AI assistant feature in a B2B SaaS platform.",
+      "questionType": "situational",
+      "orderIndex": 2,
+      "isFollowup": true,
+      "parentQuestionId": "q-1789228115429-mv90"
+    },
+    {
+      "id": "q-1789228141891-tuor",
+      "sessionId": "session-1789228113446-i6xh",
+      "questionText": "How do you handle disagreement between senior engineering leads and executive stakeholders on MVP scope?",
+      "questionType": "situational",
+      "orderIndex": 3,
+      "isFollowup": false
+    },
+    {
+      "id": "q-live-1",
+      "sessionId": "session-live-demo",
+      "questionText": "Design a globally distributed, low-latency URL shortening and analytics platform (like Bitly). Explain your hashing algorithm, database partitioning strategy, multi-tier cache invalidation, and how you prevent hot-partition hotspots during viral traffic spikes.",
+      "questionType": "technical",
+      "orderIndex": 1,
+      "isFollowup": false
+    },
+    {
+      "id": "q-comp-1",
+      "sessionId": "session-completed-demo",
+      "questionText": "Walk me through designing an end-to-end real-time collaborative editing workspace supporting 10,000 concurrent editors per document.",
+      "questionType": "technical",
+      "orderIndex": 1,
+      "isFollowup": false
+    },
+    {
+      "id": "q-comp-2",
+      "sessionId": "session-completed-demo",
+      "questionText": "How would you handle network partition edge cases and resolve concurrent conflicting keystrokes using CRDTs or Operational Transformation?",
+      "questionType": "technical",
+      "orderIndex": 2,
+      "isFollowup": true,
+      "parentQuestionId": "q-comp-1"
+    },
+    {
+      "id": "q-comp-3",
+      "sessionId": "session-completed-demo",
+      "questionText": "Explain your strategy for database indexing and query optimization when API endpoint p99 response times degrade under peak load.",
+      "questionType": "technical",
       "orderIndex": 3,
       "isFollowup": false
     }
@@ -214,6 +330,66 @@
       "sentimentScore": 10,
       "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
       "createdCompletedAt": "2026-09-12T15:24:51.974Z"
+    },
+    {
+      "id": "a-1789228132261-bezv",
+      "questionId": "q-1789228115429-mv90",
+      "transcriptText": "fviury8ijbhkdoufgdhjk",
+      "technicalScore": 5,
+      "communicationScore": 10,
+      "sentimentScore": 10,
+      "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
+      "createdCompletedAt": "2026-09-12T15:48:52.261Z"
+    },
+    {
+      "id": "a-1789228139797-lywr",
+      "questionId": "q-1789228134249-3zur",
+      "transcriptText": "hjfg67943hdsopjnfdshgie",
+      "technicalScore": 5,
+      "communicationScore": 10,
+      "sentimentScore": 10,
+      "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
+      "createdCompletedAt": "2026-09-12T15:48:59.797Z"
+    },
+    {
+      "id": "a-1789228148516-1fut",
+      "questionId": "q-1789228141891-tuor",
+      "transcriptText": "y4t43874uwidvvaduokqkjhjwfiu",
+      "technicalScore": 5,
+      "communicationScore": 10,
+      "sentimentScore": 10,
+      "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
+      "createdCompletedAt": "2026-09-12T15:49:08.516Z"
+    },
+    {
+      "id": "a-comp-1",
+      "questionId": "q-comp-1",
+      "transcriptText": "I would architect this using an event-driven microservices model. The client maintains a local state and communicates with a distributed WebSocket gateway cluster load-balanced via consistent hashing. State synchronization leverages Conflict-Free Replicated Data Types (CRDTs) to ensure commutative and associative state convergence without requiring centralized consensus locks. A Redis Pub/Sub cluster handles inter-node message routing, backed by an append-only event log in Kafka for durable session replays.",
+      "technicalScore": 92,
+      "communicationScore": 88,
+      "sentimentScore": 90,
+      "aiFeedback": "Exceptional structural clarity and domain mastery. You selected CRDTs appropriately over OT for decentralized scale and clearly detailed the WebSocket gateway orchestration.",
+      "createdCompletedAt": "2026-09-12T15:22:01.258Z"
+    },
+    {
+      "id": "a-comp-2",
+      "questionId": "q-comp-2",
+      "transcriptText": "In a network partition, state-based CRDTs allow offline clients to continue mutating their local copy. Once connectivity resumes, the vector clocks and causal graphs allow the nodes to compute deterministic least upper bounds. For extreme conflict resolution, a Lamport timestamp tie-breaker guarantees identical document states across all clients without server round-trip latency.",
+      "technicalScore": 88,
+      "communicationScore": 86,
+      "sentimentScore": 89,
+      "aiFeedback": "Precise analysis of vector clocks and causal ordering under network partitions. You demonstrated senior-level understanding of eventual consistency trade-offs.",
+      "createdCompletedAt": "2026-09-12T15:32:01.258Z"
+    },
+    {
+      "id": "a-comp-3",
+      "questionId": "q-comp-3",
+      "transcriptText": "First, I analyze the slow query log and examine PostgreSQL EXPLAIN ANALYZE execution plans to look for sequential scans, costly hash joins, or high buffer counts. I then optimize indexing strategies — employing composite indexes aligned with WHERE and ORDER BY clauses, partial indexes for skewed boolean flags, and covering indexes with INCLUDE clauses to enable index-only scans. At the application layer, I implement connection pooling and Redis multi-tier caching with jitter to prevent cache stampedes.",
+      "technicalScore": 89,
+      "communicationScore": 88,
+      "sentimentScore": 87,
+      "aiFeedback": "Great practical troubleshooting workflow. Mentioning EXPLAIN ANALYZE, partial indexes, and cache stampede jitter shows genuine production engineering experience.",
+      "createdCompletedAt": "2026-09-12T15:42:01.258Z"
     }
   ],
   "improvementPlans": [
@@ -253,6 +429,34 @@
       "suggestedPractice": [
         "Review core track documentation and study basic concepts",
         "Practice formulating 2-minute clear technical responses before submitting"
+      ],
+      "completed": false
+    },
+    {
+      "id": "plan-1789228150350",
+      "sessionId": "session-1789228113446-i6xh",
+      "focusAreas": [
+        "Core Track Fundamentals",
+        "Structured Answer Delivery"
+      ],
+      "suggestedPractice": [
+        "Review core track documentation and study basic concepts",
+        "Practice formulating 2-minute clear technical responses before submitting"
+      ],
+      "completed": false
+    },
+    {
+      "id": "plan-1789228321258",
+      "sessionId": "session-completed-demo",
+      "focusAreas": [
+        "Distributed Database Replication Lag Mitigation",
+        "OpenTelemetry Distributed Tracing & Observability",
+        "Dynamic Rate Limiting with Redis Token Bucket"
+      ],
+      "suggestedPractice": [
+        "Deep-dive into Raft & Paxos consensus protocols and study read-after-write consistency patterns with read-your-own-writes session tokens.",
+        "Benchmark Redis cluster sharding under simulated network partition faults using Chaos Mesh or Toxiproxy.",
+        "Formulate concise 2-minute architectural walk-throughs utilizing the C4 architecture diagramming model."
       ],
       "completed": false
     }

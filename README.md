@@ -6,17 +6,33 @@ Built as a full-stack app: React 19 (Vite) on the frontend, an Express API on th
 
 ---
 
-## 📸 Platform Screenshots & Visual Preview
+## 📸 Platform Screenshots & Visual Tour
 
-| Platform Dashboard & Role Tracks | Live Interview Room & Audio Waveform |
+### 1. Landing Page & Interactive Overview
+![InterviewAI Landing Page](./assets/screenshots/01-landing-hero.png)
+*Modern landing page with role highlights, real-time voice coaching value proposition, and FAANG rubric presets.*
+
+---
+
+### 2. Practice Studio & Live Interview Room
+| 10 Role Tracks & Interview Configuration | Live AI Voice Interview Room & Proctoring HUD |
 | :---: | :---: |
-| ![InterviewAI Platform Overview](./src/assets/images/interview_ai_preview_1786642208755.jpg) | ![Live Interview Room](./src/assets/images/interview_room_preview_1786642222592.jpg) |
-| *Select from 10 role tracks, difficulty levels, and target company styles.* | *Interactive live session with audio waveform visualizer and question countdown timer.* |
+| ![Interview Tracks Studio](./assets/screenshots/02-role-tracks.png) | ![Live Interview Room](./assets/screenshots/03-interview-room.png) |
+| *Select from 10 role tracks (SDE, System Design, DevOps, AI/ML), FAANG presets, custom job descriptions, and resume parsing.* | *Real-time conversational room with dual video stage, live audio visualizer, AI interviewer persona, and tab proctoring HUD.* |
 
-| Scored Evaluation Report & PDF Export |
-| :---: |
-| ![Scored Candidate Evaluation Report](./src/assets/images/results_report_preview_1786642235981.jpg) |
-| *Comprehensive candidate scoring breakdown with technical accuracy meters and 7-day study plan.* |
+---
+
+### 3. Evaluation Scorecard & Candidate Analytics
+| AI Evaluation Report & Readiness Scorecard | Candidate Dashboard & Strategy Warmup |
+| :---: | :---: |
+| ![Evaluation Results Scorecard](./assets/screenshots/04-evaluation-results.png) | ![Candidate Dashboard](./assets/screenshots/05-candidate-dashboard.png) |
+| *Deep-dive evaluation breakdown with technical accuracy meters, core strengths, areas for refinement, and PDF export.* | *Personal performance tracking, track-specific interview frameworks, timing recommendations, and study guides.* |
+
+---
+
+### 4. Website Owner & Admin Management Portal
+![Admin Management Portal](./assets/screenshots/06-admin-portal.png)
+*Real-time executive oversight: candidate enrollments, live session inspection dossiers, score distributions, and question bank rubrics.*
 
 ---
 
