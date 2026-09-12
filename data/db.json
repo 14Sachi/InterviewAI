@@ -7,10 +7,46 @@
       "role": "admin",
       "passwordHash": "$2b$10$iWyHdO4n0.7Ep0pQpgz6YeaUJw0t9VainlLyqUoKJWvpXiZSbBNbq",
       "createdAt": "2026-07-20T16:18:47.459Z"
+    },
+    {
+      "id": "user-1789226625698-zpoc",
+      "email": "sachi@gmail.com",
+      "name": "Sachi G",
+      "role": "user",
+      "passwordHash": "$2b$10$3anvUPSr8kh5FwvG0rnTP.FpF6mEOJFzDhctn3x6pASWWAm5Uy4RG",
+      "createdAt": "2026-09-12T15:23:45.698Z"
+    },
+    {
+      "id": "user-1789226760479-s0yk",
+      "email": "candidate_1789226760347_c8dd@interview.ai",
+      "name": "Candidate Guest",
+      "role": "admin",
+      "passwordHash": "$2b$10$EUfvwljxErhpYBh9B8mgSuTEkmRc5xn234Q4KCJIuw4kJewMXFivS",
+      "createdAt": "2026-09-12T15:26:00.479Z"
     }
   ],
   "resumes": [],
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "session-1789226653413-7wke",
+      "userId": "user-1789226625698-zpoc",
+      "track": "Product Manager",
+      "difficulty": "Beginner",
+      "companyPreset": "General Tech",
+      "status": "completed",
+      "createdAt": "2026-09-12T15:24:13.413Z",
+      "totalQuestionsCount": 3,
+      "overallScore": 5,
+      "completedAt": "2026-09-12T15:25:02.599Z",
+      "strengths": [
+        "Attempted to participate in the mock interview session"
+      ],
+      "weaknesses": [
+        "Provided incomplete or unreadable answers",
+        "Did not demonstrate sufficient domain knowledge"
+      ]
+    }
+  ],
   "questions": [
     {
       "id": "q-1787156395389-nk8k",
@@ -58,6 +94,31 @@
       "id": "q-1787156488683-po3o",
       "sessionId": "session-1787156470164-36ow",
       "questionText": "How do you secure modern web applications against Cross-Site Scripting (XSS) and CSRF attacks?",
+      "questionType": "situational",
+      "orderIndex": 3,
+      "isFollowup": false
+    },
+    {
+      "id": "q-1789226657518-fz4m",
+      "sessionId": "session-1789226653413-7wke",
+      "questionText": "Pick a mobile app or digital product you use regularly that you feel has a significant unmet user need. Walk me through the primary user segment you would focus on, their specific pain points, two or three features to address the problem, and the key metric you would track to measure success.",
+      "questionType": "situational",
+      "orderIndex": 1,
+      "isFollowup": false
+    },
+    {
+      "id": "q-1789226669313-r39v",
+      "sessionId": "session-1789226653413-7wke",
+      "questionText": "Walk me through how you would measure the launch success of an AI assistant feature in a B2B SaaS platform.",
+      "questionType": "situational",
+      "orderIndex": 2,
+      "isFollowup": true,
+      "parentQuestionId": "q-1789226657518-fz4m"
+    },
+    {
+      "id": "q-1789226682095-v9sd",
+      "sessionId": "session-1789226653413-7wke",
+      "questionText": "How do you handle disagreement between senior engineering leads and executive stakeholders on MVP scope?",
       "questionType": "situational",
       "orderIndex": 3,
       "isFollowup": false
@@ -123,6 +184,36 @@
       "sentimentScore": 50,
       "aiFeedback": "Your answer is very brief. Try expanding on technical reasoning, key trade-offs, and concrete examples to show domain expertise.",
       "createdCompletedAt": "2026-08-19T16:21:37.270Z"
+    },
+    {
+      "id": "a-1789226666679-pzp0",
+      "questionId": "q-1789226657518-fz4m",
+      "transcriptText": "ndgeuiuwieofhvijqwouefvhbjkspoidufhjwqo",
+      "technicalScore": 5,
+      "communicationScore": 10,
+      "sentimentScore": 10,
+      "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
+      "createdCompletedAt": "2026-09-12T15:24:26.679Z"
+    },
+    {
+      "id": "a-1789226680225-sk6a",
+      "questionId": "q-1789226669313-r39v",
+      "transcriptText": "bdsjhuiwuhncjnaksjoewiupdueabskjpoehow",
+      "technicalScore": 5,
+      "communicationScore": 10,
+      "sentimentScore": 10,
+      "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
+      "createdCompletedAt": "2026-09-12T15:24:40.225Z"
+    },
+    {
+      "id": "a-1789226691974-wgzc",
+      "questionId": "q-1789226682095-v9sd",
+      "transcriptText": "ey873879dusvasjandkqpwoi09u18jdhkasjlasn",
+      "technicalScore": 5,
+      "communicationScore": 10,
+      "sentimentScore": 10,
+      "aiFeedback": "Your response appears to be random typing or unreadable gibberish. Please provide a clear, structured response directly addressing the interview question.",
+      "createdCompletedAt": "2026-09-12T15:24:51.974Z"
     }
   ],
   "improvementPlans": [
@@ -142,6 +233,19 @@
     {
       "id": "plan-1787156498511",
       "sessionId": "session-1787156470164-36ow",
+      "focusAreas": [
+        "Core Track Fundamentals",
+        "Structured Answer Delivery"
+      ],
+      "suggestedPractice": [
+        "Review core track documentation and study basic concepts",
+        "Practice formulating 2-minute clear technical responses before submitting"
+      ],
+      "completed": false
+    },
+    {
+      "id": "plan-1789226702603",
+      "sessionId": "session-1789226653413-7wke",
       "focusAreas": [
         "Core Track Fundamentals",
         "Structured Answer Delivery"
